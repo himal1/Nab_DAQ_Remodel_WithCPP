@@ -1,0 +1,141 @@
+#include<Windows.h>
+#include<iostream>
+#include<extcode.h>
+#include "pch.h"
+#include "extcode.h"
+#include <string.h>
+#include<string>
+#include<math.h>
+#include <sstream>
+
+using namespace std;
+
+int32_t _declspec(dllexport)
+plus(double in1, double in2, double* out) {
+	*out = in1 + in2;
+	return 0;
+}
+/* LabVIEW created typedefs */
+typedef struct {
+	int32 dimSize;
+	double elt[1];
+} TD0;
+typedef TD0** TD1Hdl;
+
+typedef struct {
+	//int32 dimSize;
+	long elt[1];
+	string addr;
+} TD2;
+typedef TD2** TD2Hdl;
+
+
+_declspec(dllexport) void ARRAY1DHandle(TD1Hdl input, TD2Hdl output);
+_declspec(dllexport) void ARRAY1DHandle(TD1Hdl input, TD2Hdl output)
+{
+	//int i;
+
+	/* Calculate the floor of the square of each value. */
+	//for (i = 0; i < (*input)->dimSize; i++)
+	//{
+	//	(*output)->elt[i] = (int)floor((*input)->elt[i] * (*input)->elt[i]);
+	//}
+	
+	std::stringstream address_stream;
+	address_stream << &input;
+	(*output)->addr = address_stream.str();
+}
+
+
+/* Typedefs to adjust LabVIEW data */
+/* NOT CREATED by LabVIEW */
+
+/* LabVIEW created typedef */
+typedef struct {
+	double array_buffer[1048575];
+	string address_str;
+} TD1;
+
+_declspec(dllexport) void CLUSTERGetArrayAdd(TD1* input, TD1* output);
+
+_declspec(dllexport) void CLUSTERGetArrayAdd(TD1* input, TD1* output)
+{
+	std::stringstream address_stream;
+	address_stream << (input->array_buffer);
+	output->address_str = address_stream.str();
+	
+}
+
+_declspec(dllexport) void GetArrayAddressAsString(double* input[1048575], string address_str);
+_declspec(dllexport) void GetArrayAddressAsString(double* input[1048575], string address_str) {
+	//double arr[3];
+
+	// Convert address of the array to a string
+	std::stringstream address_stream;
+	address_stream << input;
+
+	address_str = address_stream.str();
+}
+_declspec(dllexport) void GetArrayAddressAsStringTRY(double* input[1], double* output[1]);
+_declspec(dllexport) void GetArrayAddressAsStringTRY(double* input[1], double* output[1]) {
+	//double arr[3];
+
+	// Convert address of the array to a string
+	*output[0] = 1;
+}
+
+#include "extcode.h"
+
+/* LabVIEW created typedef */
+typedef struct {
+	double DBL;
+	long I32;
+	char Boolean;
+} TD_n;
+
+_declspec(dllexport) void CLUSTERSimple(TD_n* input, TD_n* output);
+
+_declspec(dllexport) void CLUSTERSimple(TD_n* input, TD_n* output)
+{
+	output->DBL = input->DBL * input->DBL;
+	output->I32 = input->I32 / 2;
+	if (input->Boolean)
+	{
+		output->Boolean = FALSE;
+	}
+	else
+	{
+		output->Boolean = TRUE;
+	}
+}
+
+/* Typedefs to adjust LabVIEW data */
+/* NOT CREATED by LabVIEW */
+typedef struct {
+	int64 DBL;
+	uChar string[51];
+	int64 array[50];
+} TD_cn;
+
+_declspec(dllexport) void CLUSTERSimpleS_A(TD_cn* input, TD_cn* output);
+
+_declspec(dllexport) void CLUSTERSimpleS_A(TD_cn* input, TD_cn* output)
+{
+	size_t i, j;
+
+	output->DBL = input->DBL * input->DBL;
+	/* Reverse "i" characters. Assume output already has memory. */
+
+	std::stringstream address_stream;
+	address_stream << &(input->array);
+
+	for (j = 0; j < 17; j++) {
+		if (output->string[j] == NULL) break;
+		output->string[j] = address_stream.str()[j];
+	}
+
+	for (i = 0; i < 50; i++)
+	{
+		output->array[i] = input->array[i] * 2;
+	}
+}

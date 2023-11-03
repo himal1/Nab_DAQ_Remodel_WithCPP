@@ -1,0 +1,88 @@
+#include<iostream>
+#include<sstream>
+#include"pch.h"
+#include<Windows.h>
+#include<iostream>
+#include<extcode.h>
+#include "pch.h"
+#include "extcode.h"
+#include <string.h>
+#include<string>
+#include<math.h>
+#include <sstream>
+
+typedef struct {
+	float64 DBL;
+	uChar string[51];
+	uChar string2[51];
+} TD_cn;
+
+
+_declspec(dllexport) void CLUSTERSimpleS_A(TD_cn* input, TD_cn* output);
+
+_declspec(dllexport) void CLUSTERSimpleS_A(TD_cn* input, TD_cn* output)
+{
+	size_t i, j, k;
+	size_t l = 0;
+	// Convert the memory address of arr to a string
+	//for the first string
+	std::stringstream address_stream;
+	address_stream << input->string;
+	std::string address_str = address_stream.str();
+	//for the second string
+	std::stringstream address_stream2;
+	address_stream2 << input->string2;
+	std::string address_str2 = address_stream2.str();
+
+	//
+	//std::cout << "Initial address" << address_stream.str() << std::endl;
+	// Convert the string back to a memory address
+	void* address_ptr;
+	void* address_ptr2;
+
+	std::stringstream(address_str) >> address_ptr;
+	std::stringstream(address_str2) >> address_ptr2;
+
+	// Access the array element at the memory address
+	int* value_ptr = static_cast<int*>(address_ptr);
+	double value = *(value_ptr);
+
+	output->DBL = value;
+
+	for (j = 0; j < 17; j++) {
+		if (input->string[j] == NULL) break;
+		output->string[j] = address_stream.str()[j];
+	}
+	for (k = 0; k < 17; k++) {
+		if (input->string2[j] == NULL) break;
+		output->string2[j] = address_stream2.str()[j];
+	}
+	int m = 0;
+	for (i = 0; i < 500; i++)
+	{
+		int64 value = *(value_ptr + i);
+		//output->array[i] = value;
+		//Got the value of the array....
+		//do processing to identify the coincidence events
+		if (value > 25) {
+
+			// Define a pointer to an integer and initialize it with the address of a specific memory location
+			int* valueptr2 = reinterpret_cast<int*>(address_ptr2);
+			valueptr2 = valueptr2 + m;
+			// Define the value you want to write to the specified memory address
+			// Use the pointer to write the value to the specified memory address
+			*valueptr2 = value;
+			m++;
+		}
+		if (i == 400) {
+			i = 0;
+			m = 0;
+			l++;
+			if (l == 10000) break;
+		}
+	}
+
+
+
+
+}
